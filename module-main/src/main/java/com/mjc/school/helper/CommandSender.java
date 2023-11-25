@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
@@ -45,7 +46,15 @@ public class CommandSender {
         Object controller = commandHandlerWithController.controller;
         Method commandHandler = commandHandlerWithController.method;
 
-        return commandHandler.invoke(controller, getMethodArgs(command, commandHandler));
+        try {
+            return commandHandler.invoke(controller, getMethodArgs(command, commandHandler));
+        } catch (InvocationTargetException e) {
+            if (e.getTargetException() != null) {
+                throw (Exception) e.getTargetException();
+            } else {
+                throw e;
+            }
+        }
 
     }
 

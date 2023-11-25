@@ -27,6 +27,7 @@ import java.util.Set;
 import static com.mjc.school.service.exceptions.ExceptionErrorCodes.NEWS_DOES_NOT_EXIST;
 
 @Service
+@Transactional
 public class NewsService implements BaseService<NewsDtoRequest, NewsDtoResponse, Long> {
     private final BaseRepository<News, Long> newsRepository;
     private final BaseRepository<Author, Long> authorRepository;
@@ -59,7 +60,6 @@ public class NewsService implements BaseService<NewsDtoRequest, NewsDtoResponse,
     }
 
     @Override
-    @Transactional
     public NewsDtoResponse create(@Valid NewsDtoRequest createRequest) {
         News model = newsDtoMapper.dtoToModel(createRequest);
         LocalDateTime date = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);

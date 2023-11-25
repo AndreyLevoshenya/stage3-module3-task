@@ -3,48 +3,41 @@ package com.mjc.school.repository.implementation;
 import com.mjc.school.repository.BaseRepository;
 import com.mjc.school.repository.model.News;
 import com.mjc.school.repository.model.Tag;
-import org.springframework.core.metrics.StartupStep;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 public class TagRepository implements BaseRepository<Tag, Long> {
-    private static final String SELECT_ALL_TAGS = "SELECT t FROM Tag t";
-
     @PersistenceContext
     private EntityManager entityManager;
 
-
     @Override
-    @Transactional
     public List<Tag> readAll() {
-        return entityManager.createQuery(SELECT_ALL_TAGS).getResultList();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Tag> criteriaQuery = criteriaBuilder.createQuery(Tag.class);
+        Root<Tag> root = criteriaQuery.from(Tag.class);
+        return entityManager.createQuery(criteriaQuery.select(root)).getResultList();
     }
 
     @Override
-    @Transactional
     public Optional<Tag> readById(Long id) {
-        return Optional.of(entityManager.find(Tag.class, id));
+        Tag tag = entityManager.getReference(Tag.class, id);
+        return Optional.of(tag);
     }
 
     @Override
-    @Transactional
     public Tag create(Tag entity) {
         entityManager.persist(entity);
         return entity;
     }
 
     @Override
-    @Transactional
     public Tag update(Tag entity) {
         if(existById(entity.getId())) {
             Tag tag = entityManager.find(Tag.class, entity.getId());
@@ -55,7 +48,6 @@ public class TagRepository implements BaseRepository<Tag, Long> {
     }
 
     @Override
-    @Transactional
     public boolean deleteById(Long id) {
         if(existById(id)) {
             entityManager.remove(entityManager.find(Tag.class, id));
@@ -65,17 +57,15 @@ public class TagRepository implements BaseRepository<Tag, Long> {
     }
 
     @Override
-    @Transactional
     public boolean existById(Long id) {
         return entityManager.find(Tag.class, id) != null;
     }
 
-    @Transactional
     public List<News> getNewsByTagId(Long id) {
-        return new ArrayList<>(entityManager.find(Tag.class, id).getNews());
+        List<News> news = new ArrayList<>(entityManager.find(Tag.class, id).getNews());
+        return news;
     }
 
-    @Transactional
     public List<News> getNewsByTagName(String name) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         Set<News> news = new HashSet<>();

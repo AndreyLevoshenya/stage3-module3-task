@@ -16,7 +16,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         MenuHelper menuHelper = applicationContext.getBean(MenuHelper.class);
-        CommandSender commandSender = new CommandSender(applicationContext);
+        CommandSender commandSender = applicationContext.getBean(CommandSender.class);
 
         while (true) {
             try {

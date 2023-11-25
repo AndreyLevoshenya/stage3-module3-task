@@ -16,12 +16,12 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.mjc.school.service.exceptions.ExceptionErrorCodes.NEWS_DOES_NOT_EXIST;
 import static com.mjc.school.service.exceptions.ExceptionErrorCodes.TAG_DOES_NOT_EXIST;
 
 @Service
+@Transactional
 public class TagService implements BaseService<TagDtoRequest, TagDtoResponse, Long> {
     private final BaseRepository<Tag, Long> tagRepository;
     private final BaseRepository<News, Long> newsRepository;

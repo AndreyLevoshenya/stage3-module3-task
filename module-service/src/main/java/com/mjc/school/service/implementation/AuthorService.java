@@ -21,6 +21,7 @@ import static com.mjc.school.service.exceptions.ExceptionErrorCodes.AUTHOR_DOES_
 import static com.mjc.school.service.exceptions.ExceptionErrorCodes.NEWS_DOES_NOT_EXIST;
 
 @Service
+@Transactional
 public class AuthorService implements BaseService<AuthorDtoRequest, AuthorDtoResponse, Long> {
     private final BaseRepository<Author, Long> authorRepository;
     private final BaseRepository<News, Long> newsRepository;
@@ -81,7 +82,6 @@ public class AuthorService implements BaseService<AuthorDtoRequest, AuthorDtoRes
         }
     }
 
-    @Transactional
     public AuthorDtoResponse getAuthorByNewsId(@Valid Long id) {
         if(newsRepository.existById(id)) {
             Author author = newsRepository.readById(id).get().getAuthor();
