@@ -1,7 +1,6 @@
 package com.mjc.school.helper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.PrintStream;
@@ -23,7 +22,6 @@ public class MenuHelper {
     private final Map<String, Function<Scanner, Command>> operations;
     private final PrintStream printStream = new PrintStream(System.out);
 
-    @Autowired
     public MenuHelper() {
 
         this.operations = new HashMap<>();
